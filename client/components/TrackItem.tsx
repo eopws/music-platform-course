@@ -5,6 +5,7 @@ import styles from '../styles/TrackItem.module.scss'
 import {Delete, Pause, PlayArrow} from "@material-ui/icons";
 import {useRouter} from "next/router";
 import {useActions} from "../hooks/useActions";
+import { useTypedSelector } from '../hooks/useTypedSelector';
 
 interface TrackItemProps {
     track: ITrack;
@@ -14,19 +15,26 @@ interface TrackItemProps {
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
     const router = useRouter()
     const {playTrack, pauseTrack, setActiveTrack} = useActions()
+    const { currentTime, duration, pause } = useTypedSelector(state => state.player)
 
     const play = (e) => {
         e.stopPropagation()
-        setActiveTrack(track)
-        playTrack()
+
+        if (!active) {
+            setActiveTrack(track)
+        } else {
+            pause ? playTrack() : pauseTrack()
+        }
     }
 
     return (
         <Card className={styles.track} onClick={() => router.push('/tracks/' + track._id)}>
             <IconButton onClick={play}>
-                {!active
+                {active && (pause
                     ? <PlayArrow/>
-                    : <Pause/>
+                    : <Pause/>)
+                 ||
+                 <PlayArrow/>
                 }
             </IconButton>
             <img width={70} height={70} src={'http://localhost:5000/' + track.picture}/>
@@ -34,7 +42,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
                 <div>{track.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{track.artist}</div>
             </Grid>
-            {active && <div>02:42 / 03:22</div>}
+            {active && <div>{currentTime} / {duration}</div>}
             <IconButton onClick={e => e.stopPropagation()} style={{marginLeft: 'auto'}}>
                 <Delete/>
             </IconButton>

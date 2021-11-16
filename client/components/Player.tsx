@@ -18,12 +18,21 @@ const Player = () => {
             audio = new Audio()
         } else {
             setAudio()
-            play()
+            playTrack()
         }
     }, [active])
 
+    useEffect(() => {
+        if (pause) {
+            audio.pause()
+        } else {
+            audio.play()
+        }
+    }, [active, pause]);
+
     const setAudio = () => {
         if (active) {
+            audio.pause()
             audio.src = 'http://localhost:5000/' + active.audio
             audio.volume = volume / 100
             audio.onloadedmetadata = () => {
@@ -32,16 +41,6 @@ const Player = () => {
             audio.ontimeupdate = () => {
                 setCurrentTime(Math.ceil(audio.currentTime))
             }
-        }
-    }
-
-    const play = () => {
-        if (pause) {
-            playTrack()
-            audio.play()
-        } else {
-            pauseTrack()
-            audio.pause()
         }
     }
 
@@ -60,7 +59,7 @@ const Player = () => {
 
     return (
         <div className={styles.player}>
-            <IconButton onClick={play}>
+            <IconButton onClick={() => pause ? playTrack() : pauseTrack()}>
                 {pause
                     ? <PlayArrow/>
                     : <Pause/>
