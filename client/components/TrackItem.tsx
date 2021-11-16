@@ -6,6 +6,7 @@ import {Delete, Pause, PlayArrow} from "@material-ui/icons";
 import {useRouter} from "next/router";
 import {useActions} from "../hooks/useActions";
 import { useTypedSelector } from '../hooks/useTypedSelector';
+import formatTrackTime from '../utils/formatTime';
 
 interface TrackItemProps {
     track: ITrack;
@@ -15,7 +16,7 @@ interface TrackItemProps {
 const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
     const router = useRouter()
     const {playTrack, pauseTrack, setActiveTrack} = useActions()
-    const { currentTime, duration, pause } = useTypedSelector(state => state.player)
+    const { currentTime, pause } = useTypedSelector(state => state.player)
 
     const play = (e) => {
         e.stopPropagation()
@@ -42,7 +43,10 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
                 <div>{track.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{track.artist}</div>
             </Grid>
-            {active && <div>{currentTime} / {duration}</div>}
+            {active
+                ? <div>{formatTrackTime(currentTime)} / {formatTrackTime(track.duration)}</div>
+                : <div>{formatTrackTime(track.duration)}</div>
+            }
             <IconButton onClick={e => e.stopPropagation()} style={{marginLeft: 'auto'}}>
                 <Delete/>
             </IconButton>
