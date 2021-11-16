@@ -1,3 +1,4 @@
+import { ConfigModule } from '@nestjs/config';
 import {Module} from "@nestjs/common";
 import {TrackModule} from "./track/track.module";
 import {MongooseModule} from "@nestjs/mongoose";
@@ -8,7 +9,8 @@ import {ServeStaticModule} from "@nestjs/serve-static";
 @Module({
     imports: [
         ServeStaticModule.forRoot({rootPath: path.resolve(__dirname, 'static')}),
-        MongooseModule.forRoot('mongodb+srv://admin:admin@cluster0.oeudk.mongodb.net/music-platform?retryWrites=true&w=majority'),
+        ConfigModule.forRoot(),
+        MongooseModule.forRoot(process.env.DATABASE_URL),
         TrackModule,
         FileModule
     ]
