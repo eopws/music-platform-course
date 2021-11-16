@@ -11,6 +11,7 @@ let audio;
 
 const Player = () => {
     const {pause, volume, active, duration, currentTime} = useTypedSelector(state => state.player)
+    const {tracks} = useTypedSelector(state => state.track)
     const {pauseTrack, playTrack, setVolume, setCurrentTime, setDuration, setActiveTrack} = useActions()
 
     useEffect(() => {
@@ -41,6 +42,13 @@ const Player = () => {
             }
             audio.ontimeupdate = () => {
                 setCurrentTime(Math.ceil(audio.currentTime))
+            }
+            audio.onended = () => {
+                let nextTrackIndex = tracks.indexOf(active) + 1
+
+                nextTrackIndex = tracks[nextTrackIndex] ? nextTrackIndex : 0
+
+                setActiveTrack(tracks[nextTrackIndex])
             }
         }
     }
