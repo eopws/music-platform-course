@@ -74,7 +74,10 @@ const Player = () => {
                     : <Pause/>
                 }
             </IconButton>
-            <Grid container direction="column" style={{width: 200, margin: '0 20px'}}>
+
+            <img className={styles['track-picture']} src={'http://localhost:5000/' + active.picture} />
+
+            <Grid container direction="column" style={{width: 200, margin: '0 20px 0 10px'}}>
                 <div>{active?.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{active?.artist}</div>
             </Grid>
