@@ -5,6 +5,7 @@ import styles from '../styles/Player.module.scss'
 import TrackProgress from "./TrackProgress";
 import {useTypedSelector} from "../hooks/useTypedSelector";
 import {useActions} from "../hooks/useActions";
+import TrackVolume from './TrackVolume';
 
 let audio;
 
@@ -77,9 +78,9 @@ const Player = () => {
                 <div>{active?.name}</div>
                 <div style={{fontSize: 12, color: 'gray'}}>{active?.artist}</div>
             </Grid>
-            <TrackProgress left={currentTime} right={active.duration} track onChange={changeCurrentTime}/>
+            <TrackProgress left={currentTime} right={active.duration} onChange={changeCurrentTime}/>
             <VolumeUp style={{marginLeft: 'auto'}}/>
-            <TrackProgress left={volume} right={100} onChange={changeVolume}/>
+            <TrackVolume left={volume} right={100} onChange={changeVolume}/>
         </div>
     );
 };

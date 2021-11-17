@@ -2,16 +2,12 @@ import React from 'react';
 import formatTrackTime from '../utils/formatTime';
 
 interface TrackProgressProps {
-    track?: boolean; // is track progress displaying for a track
     left: number;
     right: number;
-    onChange: (e) => void
+    onChange: (e) => void;
 }
 
-const TrackProgress: React.FC<TrackProgressProps> =
-    ({
-        left, right, track = false, onChange
-     }) => {
+const TrackProgress: React.FC<TrackProgressProps> = ({left, right, onChange}) => {
         return (
             <div style={{display: 'flex'}}>
                 <input
@@ -21,11 +17,7 @@ const TrackProgress: React.FC<TrackProgressProps> =
                     value={left}
                     onChange={onChange}
                 />
-                {
-                    track
-                    ? <div>{formatTrackTime(left)} / {formatTrackTime(right)}</div>
-                    : <div>{left} / {right}</div>
-                }
+                <div>{formatTrackTime(left)} / {formatTrackTime(right)}</div>
             </div>
         );
     };
