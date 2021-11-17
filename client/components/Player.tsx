@@ -1,25 +1,27 @@
 import React, {useEffect} from 'react';
+import clsx from 'clsx';
 import {Pause, PlayArrow, VolumeUp} from "@material-ui/icons";
-import {Grid, IconButton} from "@material-ui/core";
+import {Button, Grid, IconButton} from "@material-ui/core";
 import styles from '../styles/Player.module.scss'
 import TrackProgress from "./TrackProgress";
 import {useTypedSelector} from "../hooks/useTypedSelector";
 import {useActions} from "../hooks/useActions";
 import TrackVolume from './TrackVolume';
+import RevealIcon from '@material-ui/icons/ArrowDropUp';
+import CollapseIcon from '@material-ui/icons/ArrowDropDown';
 
 let audio;
 
 const Player = () => {
-    const {pause, volume, active, currentTime} = useTypedSelector(state => state.player)
+    const {pause, volume, active, currentTime, collapsed} = useTypedSelector(state => state.player)
     const {tracks} = useTypedSelector(state => state.track)
-    const {pauseTrack, playTrack, setVolume, setCurrentTime, setActiveTrack} = useActions()
+    const {pauseTrack, playTrack, setVolume, setCurrentTime, setActiveTrack, setCollapsed} = useActions()
 
     useEffect(() => {
         if (!audio) {
             audio = new Audio()
         } else {
             setAudio()
-            playTrack()
         }
     }, [active])
 
@@ -59,12 +61,19 @@ const Player = () => {
         setCurrentTime(Number(e.target.value))
     }
 
-    if (!active) {
-        return null
-    }
-
     return (
-        <div className={styles.player}>
+        <div className={clsx({[styles.player]: true, [styles.player_collapsed]: collapsed})}>
+            <Button
+                className={styles['collapse-btn']}
+                variant="contained"
+                onClick={() => setCollapsed(!collapsed)}
+            >
+                {collapsed
+                    ? <RevealIcon />
+                    : <CollapseIcon />
+                }
+            </Button>
+
             <IconButton onClick={() => pause ? playTrack() : pauseTrack()}>
                 {pause
                     ? <PlayArrow/>
@@ -72,13 +81,13 @@ const Player = () => {
                 }
             </IconButton>
 
-            <img className={styles['track-picture']} src={'http://localhost:5000/' + active.picture} />
+            <img className={styles['track-picture']} src={'http://localhost:5000/' + active?.picture} />
 
             <Grid container direction="column" style={{width: 200, margin: '0 20px 0 10px'}}>
-                <div>{active?.name}</div>
-                <div style={{fontSize: 12, color: 'gray'}}>{active?.artist}</div>
+                <div>{active?.name || 'track'}</div>
+                <div style={{fontSize: 12, color: 'gray'}}>{active?.artist || 'artist'}</div>
             </Grid>
-            <TrackProgress left={currentTime} right={active.duration} onChange={changeCurrentTime}/>
+            <TrackProgress left={currentTime} right={active?.duration || 0} onChange={changeCurrentTime}/>
             <VolumeUp style={{marginLeft: 'auto'}}/>
             <TrackVolume left={volume} right={100} onChange={changeVolume}/>
         </div>

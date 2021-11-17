@@ -23,6 +23,7 @@ const TrackItem: React.FC<TrackItemProps> = ({track, active = false}) => {
 
         if (!active) {
             setActiveTrack(track)
+            playTrack()
         } else {
             pause ? playTrack() : pauseTrack()
         }

@@ -4,7 +4,8 @@ const initialState: PlayerState = {
     currentTime: 0,
     active: null,
     volume: 50,
-    pause: true
+    pause: true,
+    collapsed: true,
 }
 
 export const playerReducer = (state = initialState, action: PlayerAction): PlayerState => {
@@ -19,6 +20,8 @@ export const playerReducer = (state = initialState, action: PlayerAction): Playe
             return {...state, volume: action.payload}
         case PlayerActionTypes.SET_ACTIVE:
             return {...state, active: action.payload, currentTime: 0}
+        case PlayerActionTypes.SET_COLLAPSED:
+            return {...state, collapsed: action.payload}
         default:
             return state
 

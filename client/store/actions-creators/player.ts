@@ -17,3 +17,6 @@ export const setCurrentTime = (payload: number): PlayerAction => {
 export const setActiveTrack = (payload: ITrack): PlayerAction => {
     return {type: PlayerActionTypes.SET_ACTIVE, payload}
 }
+export const setCollapsed = (payload: boolean): PlayerAction => {
+    return {type: PlayerActionTypes.SET_COLLAPSED, payload}
+}

@@ -5,6 +5,7 @@ export interface PlayerState {
     volume: number;
     currentTime: number;
     pause: boolean;
+    collapsed: boolean;
 }
 
 export enum PlayerActionTypes {
@@ -13,6 +14,7 @@ export enum PlayerActionTypes {
     SET_ACTIVE = "SET_ACTIVE",
     SET_CURRENT_TIME = "SET_CURRENT_TIME",
     SET_VOLUME = "SET_VOLUME",
+    SET_COLLAPSED = "SET_COLLAPSED",
 }
 
 interface PlayAction {
@@ -33,6 +35,10 @@ interface SetCurrentTimeAction {
     type: PlayerActionTypes.SET_CURRENT_TIME,
     payload: number;
 }
+interface SetCollapsedAction {
+    type: PlayerActionTypes.SET_COLLAPSED,
+    payload: boolean;
+}
 
 export type PlayerAction =
     PlayAction
@@ -40,3 +46,4 @@ export type PlayerAction =
     | SetActiveAction
     | SetVolumeAction
     | SetCurrentTimeAction
+    | SetCollapsedAction
