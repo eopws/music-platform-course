@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import MainLayout from "../../layouts/MainLayout";
 import StepWrapper from "../../components/StepWrapper";
-import {Button, Grid, TextField} from "@material-ui/core";
-import FileUpload from "../../components/FileUpload";
+import {Button, Grid} from "@material-ui/core";
 import {useInput} from "../../hooks/useInput";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {GeneralInfo, SetPicture, SetAudio} from '../../components/create-track-steps/';
+
 
 const Create = () => {
     const [activeStep, setActiveStep] = useState(0)
@@ -40,35 +41,17 @@ const Create = () => {
         <MainLayout>
             <StepWrapper activeStep={activeStep}>
                 {activeStep === 0 &&
-                <Grid container direction={"column"} style={{padding: 20}}>
-                    <TextField
-                        {...name}
-                        style={{marginTop: 10}}
-                        label={"Название трека"}
+                    <GeneralInfo
+                        name={name}
+                        artist={artist}
+                        text={text}
                     />
-                    <TextField
-                        {...artist}
-                        style={{marginTop: 10}}
-                        label={"Имя исполнителя"}
-                    />
-                    <TextField
-                        {...text}
-                        style={{marginTop: 10}}
-                        label={"Слова к треку"}
-                        multiline
-                        rows={3}
-                    />
-                </Grid>
                 }
                 {activeStep === 1 &&
-                <FileUpload setFile={setPicture} accept="image/*">
-                    <Button>Загрузить изображение</Button>
-                </FileUpload>
+                    <SetPicture picture={picture} setPicture={setPicture} />
                 }
                 {activeStep === 2 &&
-                <FileUpload setFile={setAudio} accept="audio/*">
-                    <Button>Загрузить аудио</Button>
-                </FileUpload>
+                    <SetAudio setAudio={setAudio} />
                 }
             </StepWrapper>
             <Grid container justifyContent='space-between'>
